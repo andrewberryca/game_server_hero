@@ -4,5 +4,4 @@ module.exports = {
     initialize: function (app) {
     app.use('/', battleStart);
     }
-
 };
