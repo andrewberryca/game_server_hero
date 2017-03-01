@@ -1,23 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const co = require('co');
-const mongo = require('mongodb');
 
-const url = 'mongodb://localhost:27017/test';
 
-function* getCollection(name) {
-    const db = yield mongo.MongoClient.connect(url);
-    return db.collection(name);
-}
+const mongo = require('../../lib/mongo');
+
 
 function* loadUser (name) {
-    const collection = yield getCollection('user');
+    const collection = yield mongo.getCollection('user');
     const result = yield collection.findOne({ name: name });
     return result || {name: name};
 }
 
 function* saveUser (data) {
-    const collection = yield getCollection('user');
+    const collection = yield mongo.getCollection('user');
     yield collection.update({name: data.name}, data, {upsert: true});
 }
 
@@ -81,4 +77,3 @@ router.post('/battle/start', co.wrap (function* (req, res) {
 }));
 
 module.exports = router;
-
